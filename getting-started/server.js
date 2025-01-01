@@ -57,8 +57,38 @@ const connectDB = async () => {
     // const resultArray=await resultCursor.toArray();
     // console.log(resultArray);
     // ? findOne() method
-    const result = await students.findOne({ age: 21 });
-    console.log(result);
+    // const result = await students.findOne({ age: 21 });
+    // console.log(result);
+    // ! update operation
+    // ?updateOne()
+    // const result=await students.updateOne({name:"billa"},{
+    //   $set:{age:20}
+    // })
+    // console.log(result);
+    // ?updateMany()
+    // const result=await students.updateMany({age:21},{ $set:{age:20} });
+    // console.log(result);
+    // ?findOneAndUpdate()
+    // const result = await students.findOneAndUpdate(
+    //   { name: "chenku" },
+    //   {
+    //     $set: { age: 22 },
+    //   }
+    // );
+    // console.log(result);
+    // !-------------delete operation-------------------
+    // ?deleteOne()
+    // const result = await students.deleteOne({ name: "chenku" });
+    // console.log(result);
+    // ?deleteMany()
+    // const result = await students.deleteMany({ age: 21 });
+    // console.log(result);
+    // ?findOneAndDelete()
+    // const result = await students.findOneAndDelete({ name: "chenku" });
+    // console.log(result);
+    // !-------------------AGGREGATION-------------------
+    
+
   } catch (err) {
     console.log(err.message);
   }
