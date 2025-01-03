@@ -34,7 +34,7 @@ const userProfileSchema = new mongoose.Schema({
 const User = mongoose.model("User", userProfileSchema);
 //!-----------------Create operation---------------
 // ?save()
-// const newUser = new User({
+// *const newUser = new User({
 //   userName: "bongbong",
 //   dob: new Date("2005-9-9"),
 //   isActive: true,
@@ -61,7 +61,7 @@ const User = mongoose.model("User", userProfileSchema);
 //     console.log(err);
 //   });
 // ?create()
-// User.create({
+//* User.create({
 //   userName: "billaDon",
 //   dob: new Date("2004-2-6"),
 //   isActive: true,
@@ -79,44 +79,44 @@ const User = mongoose.model("User", userProfileSchema);
 //   },
 // }).then((data)=>console.log(data)).catch((err)=>console.log(err.message));
 // ?insertMany()
-User.insertMany([
-  {
-    userName: "silu",
-    dob: new Date("2005-9-9"),
-    isActive: true,
-    email: "silu@gamil.com",
-    interest: ["coding", "reading"],
-    objectId: new mongoose.Types.ObjectId(),
-    address: {
-      street: "bong street",
-      city: "bong city",
-      pincode: 123456,
-    },
-    customData: {
-      key1: "value1",
-      key2: "value2",
-    },
-  },
-  {
-    userName: "chotuchai",
-    dob: new Date("2005-9-9"),
-    isActive: true,
-    email: "chotuchai@gamil.com",
-    interest: ["chai making", "chai drinking"],
-    objectId: new mongoose.Types.ObjectId(),
-    address: {
-      street: "bong street",
-      city: "bona city",
-      pincode: 333456,
-    },
-    customData: {
-      key1: "value1",
-      key2: "value2",
-    },
-  },
-])
-  .then((data) => console.log(data))
-  .catch((err) => console.log(err.message));
+//* User.insertMany([
+//   {
+//     userName: "silu",
+//     dob: new Date("2005-9-9"),
+//     isActive: true,
+//     email: "silu@gamil.com",
+//     interest: ["coding", "reading"],
+//     objectId: new mongoose.Types.ObjectId(),
+//     address: {
+//       street: "bong street",
+//       city: "bong city",
+//       pincode: 123456,
+//     },
+//     customData: {
+//       key1: "value1",
+//       key2: "value2",
+//     },
+//   },
+//   {
+//     userName: "chotuchai",
+//     dob: new Date("2005-9-9"),
+//     isActive: true,
+//     email: "chotuchai@gamil.com",
+//     interest: ["chai making", "chai drinking"],
+//     objectId: new mongoose.Types.ObjectId(),
+//     address: {
+//       street: "bong street",
+//       city: "bona city",
+//       pincode: 333456,
+//     },
+//     customData: {
+//       key1: "value1",
+//       key2: "value2",
+//     },
+//   },
+// ])
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
 
 // start the server
 app.listen(port, () => {
