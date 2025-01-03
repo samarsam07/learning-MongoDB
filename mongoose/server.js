@@ -6,7 +6,7 @@ const port = 8082 || process.env.PORT;
 const connectDB = async () => {
   try {
     await mongoose.connect(
-      "mongodb+srv://samarmohd251:fziRniuPfa4op4uX@learning.18puu.mongodb.net/student-database"
+      
     );
     console.log("connected to the database");
   } catch (err) {
