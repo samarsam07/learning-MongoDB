@@ -21,9 +21,12 @@ const userProfileSchema = new mongoose.Schema(
     userName: {
       type: String,
       required: [true, "Please provide a username"],
-      unique: true,
-      min: 3,
-      max: 15,
+      validate: {
+        validator: function (v) {
+          return /^[a-zA-Z0-9]+$/.test(v);
+        },
+        message: "username should contain only alphabets and numbers",
+      }, //!custom validation
     },
     email: {
       type: String,
@@ -62,7 +65,7 @@ const createDoc = async () => {
     console.log(e);
   }
 };
-createDoc();//calling the function
+createDoc(); //calling the function
 // start the server
 app.listen(port, () => {
   console.log(`server is runnung on port ${port}`);
