@@ -5,9 +5,7 @@ const port = 8082 || process.env.PORT;
 // connect to the database
 const connectDB = async () => {
   try {
-    await mongoose.connect(
-      
-    );
+    await mongoose.connect();
     console.log("connected to the database");
   } catch (err) {
     console.log("error connecting to the database", err.message);
@@ -117,6 +115,142 @@ const User = mongoose.model("User", userProfileSchema);
 // ])
 //   .then((data) => console.log(data))
 //   .catch((err) => console.log(err.message));
+//!-----------------Read operation---------------
+// ?find()
+// User.find().then((data) => console.log(data)).catch((err) => console.log(err.message));
+// ?findOne
+// User.findOne({ userName: "silu" })
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?findById()
+// User.findById("612f3d4b0f3b7f3f2c9f6b1f")
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?findByIdAndUpdate()
+// User.findByIdAndUpdate("612f3d4b0f3b7f3f2c9f6b1f", {
+//   userName: "silu",
+//   dob: new Date("2005-9-9"),
+//   isActive: true,
+//   email: "silu123@gmail.com",
+//   interest: ["coding", "reading"],
+//   objectId: new mongoose.Types.ObjectId(),
+//   address: {
+//     street: "bong street",
+//     city: "bong city",
+//     pincode: 123456,
+//   },
+//   customData: {
+//     key1: "value1",
+//     key2: "value2",
+//   },
+// })
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?findByIdAndDelete()
+// User.findByIdAndDelete("612f3d4b0f3b7f3f2c9f6b1f")
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+//!-----------------Update operation---------------
+// ?updateOne()
+// User.updateOne(
+//   { userName: "silu" },
+//   {
+//     userName: "silu",
+//     dob: new Date("2005-9-9"),
+//     isActive: true,
+//     email: "SILU@GMAIL.COM",
+//     interest: ["coding", "reading"],
+//     objectId: new mongoose.Types.ObjectId(),
+//     address: {
+//       street: "bong street",
+//       city: "bong city",
+//       pincode: 123456,
+//     },
+//     customData: {
+//       key1: "value1",
+//       key2: "value2",
+//     },
+//   }
+// )
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?updateMany()
+// User.updateMany(
+//   { userName: "silu" },
+//   {
+
+//!-----------------Delete operation---------------
+
+// ?deleteOne()
+// User.deleteOne({ userName: "silu" })
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?deleteMany()
+// User.deleteMany({ userName: "silu" })
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?remove()
+// User.remove({ userName: "silu" })
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?findOneAndRemove()
+// User.findOneandRemove({ userName: "silu" })
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?findByIdAndRemove()
+// User.findByIdAndRemove("612f3d4b0f3b7f3f2c9f6b1f")
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?deleteById()
+// User.findByIdAndRemove("612f3d4b0f3b7f3f2c9f6b1f")
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// !-----------------READ operation WITH WHERE----------------
+// ?WHERE
+// User.find({ userName: "silu" }).Where("isActive").equals(true)
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?WHERE IN
+// User.find({ userName: { $in: ["silu", "chotuchai"] } })
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?SORT
+// User.find().sort({ userName: 1 })
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?LIMIT
+// User.find().limit(2)
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?SKIP
+// User.find().skip(2)
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?SELECT  
+// User.find().select("userName email")
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?COUNT
+// User.find().count()
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?POPULATE
+// User.find().populate("objectId")
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+// ?AGGREGATE
+// User.aggregate([
+//   {
+//     $match: { userName: "silu" },
+//   },
+//   {
+//     $group: { _id: "$userName", total: { $sum: 1 } },
+//   },
+// ])
+//   .then((data) => console.log(data))
+//   .catch((err) => console.log(err.message));
+
+
 
 // start the server
 app.listen(port, () => {
