@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
-const port = 8082 || process.env.PORT;
+const port = 8080 || process.env.PORT;
 // connect to the database
 const connectDB = async () => {
   try {
@@ -15,51 +15,54 @@ const connectDB = async () => {
 };
 
 connectDB();
-//! address schema
-// const addressSchema = new mongoose.Schema(
-//   {
-//     street: String,
-//     city: String,
-//     state: String,
-//     pincode: Number,
-//   },
-//   {
-//     timestamps: true,
-//   }
-// );
-// // user Schema
-// const userschema = new mongoose.Schema(
-//   {
-//     username: String,
-//     email: String,
-//     address: [addressSchema],
-//   },
-//   {
-//     timestamps: true,
-//   }
-// );
-// // user model
-// const User = new mongoose.model("user", userschema);
-// // create a new user
-// const createDoc = async () => {
-//   try {
-//     const newUser = await User.create({
-//       username: "mugi",
-//       email: "mugi123@gamil.com",
-//       address: [{
-//         street: "1234",
-//         city: "mumbai",
-//         state: "maharashtra",
-//         pincode: 400001,
-//       }],
-//     });
-//     console.log(newUser);
-//   } catch (err) {
-//     console.error("Error creating document", err.message);
-//   }
-// };
-// // call the function
-// createDoc();
+// create a schema
+// !embedded data
+const studentSchema = new mongoose.Schema(
+  {
+    name: String,
+    age: Number,
+    grade: String,
+  },
+  {
+    timestamps: true,
+  }
+);
+const classRoomSchema = new mongoose.Schema(
+  {
+    class: String,
+    students: [studentSchema], //*one to many relationship
+  },
+  { timestamps: true }
+);
+const ClassRoom = new mongoose.model("Classroom", classRoomSchema);
+// create a new class
+const createClass = async () => {
+  try {
+    const newClass=await ClassRoom.create({
+      class: "X",
+      students: [
+        {
+          name: "sam",
+          age: 18,
+          grade: "A",
+        },
+        {
+          name: "mugi",
+          age: 17,
+          grade: "B",
+        },{
+          name: "sara",
+          age: 16,
+          grade: "C",
+        },
+      ],
+    });
+    console.log(newClass);
+  } catch (err) {
+    console.error("error creating document", err.message);
+  }
+};
+createClass();
 // start the server
 app.listen(port, () => {
   console.log(`server is runnung on port ${port}`);
