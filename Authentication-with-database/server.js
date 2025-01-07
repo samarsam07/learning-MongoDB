@@ -27,9 +27,9 @@ connectDB();
 const userSchema = {
   username: String,
   password: String,
-  role:{
-    type:String,
-    default:"user"
+  role: {
+    type: String,
+    default: "user",
   },
 };
 // user Model
@@ -41,9 +41,19 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 // register route
-app.get("/register",(req,res)=>{
+app.get("/register", (req, res) => {
   res.render("register");
-})
+});
+// post register
+app.post("/register", async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const newUser = await User.create({ username, password });
+  } catch (error) {
+    console.log(error.message);
+  }
+  res.redirect("/login")
+});
 // login route
 app.get("/login", (req, res) => {
   res.render("login");
