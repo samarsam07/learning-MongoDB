@@ -251,7 +251,6 @@ const User = mongoose.model("User", userProfileSchema);
 //   .catch((err) => console.log(err.message));
 
 
-
 // start the server
 app.listen(port, () => {
   console.log(`server is runnung on port ${port}`);
