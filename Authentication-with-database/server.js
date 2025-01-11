@@ -96,7 +96,7 @@ app.get("/dashboard", (req, res) => {
     res.redirect("/login");
   }
 });
-// logout rou
+// logout route
 app.get("/logout", (req, res) => {
   res.clearCookie("userData");
   res.redirect("/login");
