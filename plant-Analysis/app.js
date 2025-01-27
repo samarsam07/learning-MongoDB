@@ -17,7 +17,7 @@ const upload = multer({
 });
 app.use(express.json({ limit: "10mb" }));
 // initialize the google generative AI
-const genAI = new GoogleGenerativeAI("AIzaSyBeWJ2vJLJoQT7zwJJ7UpYbi9RqhCFvGTk");
+const genAI = new GoogleGenerativeAI("AIzaSyAq7ic5PgsG5_FWK1JMuf_xx0YPjklRGwg");
 app.use(express.static("public"));
 // route to upload the image
 // home route
@@ -25,37 +25,77 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
   });
 
+// app.post("/analyze", upload.single("image"), async (req, res) => {
+//   try {
+//     if (!req.file) {
+//       return res.status(400).json({ message: "Please upload the image" });
+//     } else {
+//       const imagePath = req.file.path;
+//       const imageData = await fsPromises.readFile(imagePath, {
+//         encoding: "base64",
+//       });
+//       const model = genAI.getGenerativeModel({
+//         model: "gemini-1.5-flash",
+//       });
+//       const result = await model.generateContent([
+//         "Analyze this plant image and provide detailed analysis of its species, health, and care recommendations, its characteristics, care instructions, and any interesting facts. Please provide the response in plain text without using any markdown formatting.",
+//         {
+//           inlineData: {
+//             mimeType: req.file.mimetype,
+//             data: imageData,
+//           },
+//         },
+//       ]);
+//       const plantInfo = result.response.text();
+//       await fsPromises.unlink(imagePath);
+//       res.json({
+//         message: plantInfo,
+//         image: `Data:${req.file.mimetype};base64,${imageData}`,
+//       });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ message: "Internal Server Error" });
+//   }
+// });
 app.post("/analyze", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: "Please upload the image" });
-    } else {
-      const imagePath = req.file.path;
-      const imageData = await fsPromises.readFile(imagePath, {
-        encoding: "base64",
-      });
-      const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
-      });
-      const result = await model.generateContent([
-        "Analyze this plant image and provide detailed analysis of its species, health, and care recommendations, its characteristics, care instructions, and any interesting facts. Please provide the response in plain text without using any markdown formatting.",
-        {
-          inlineData: {
-            mimeType: req.file.mimetype,
-            data: imageData,
-          },
-        },
-      ]);
-      const plantInfo = result.response.text();
-      await fsPromises.unlink(imagePath);
-      res.json({
-        message: plantInfo,
-        image: `Data:${req.file.mimetype};base64,${imageData}`,
-      });
+      return res.status(400).json({ error: "No image file uploaded" });
     }
+
+    const imagePath = req.file.path;
+    const imageData = await fsPromises.readFile(imagePath, {
+      encoding: "base64",
+    });
+
+    // Use the Gemini model to analyze the image
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const result = await model.generateContent([
+      "Analyze this plant image and provide detailed analysis of its species, health, and care recommendations, its characteristics, care instructions, and any interesting facts. Please provide the response in plain text without using any markdown formatting.",
+      {
+        inlineData: {
+          mimeType: req.file.mimetype,
+          data: imageData,
+        },
+      },
+    ]);
+
+    const plantInfo = result.response.text();
+
+    // Clean up: delete the uploaded file
+    await fsPromises.unlink(imagePath);
+
+    // Respond with the analysis result and the image data
+    res.json({
+      result: plantInfo,
+      image: `data:${req.file.mimetype};base64,${imageData}`,
+    });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error analyzing image:", error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while analyzing the image" });
   }
 });
 // route to download the image
