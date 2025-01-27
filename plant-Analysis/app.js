@@ -6,6 +6,7 @@ const fs = require("fs");
 const fsPromises = require("fs").promises;
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const path = require("path");
+// const { rejects } = require("assert");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -16,9 +17,13 @@ const upload = multer({
 });
 app.use(express.json({ limit: "10mb" }));
 // initialize the google generative AI
-const genAI = new GoogleGenerativeAI("AIzaSyBdMe-a0speon50bk9egJGxbKnaPSitctM");
+const genAI = new GoogleGenerativeAI("AIzaSyBeWJ2vJLJoQT7zwJJ7UpYbi9RqhCFvGTk");
 app.use(express.static("public"));
 // route to upload the image
+// home route
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+  });
 
 app.post("/analyze", upload.single("image"), async (req, res) => {
   try {
@@ -55,7 +60,53 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
 });
 // route to download the image
 app.post("/download", async (req, res) => {
-  res.json({ message: " successfully" });
+  const {result, image} = req.body;
+ try {
+  // insure report directory exists
+  const reportDir = path.join(__dirname, "report");
+  await fsPromises.mkdir(reportDir, { recursive: true });
+  // generate the pdf
+  const filename=`plant-analysis-report-${Date.now()}.pdf`;
+  const pdfPath = path.join(reportDir, filename);
+  const writeStream = fs.createWriteStream(pdfPath);
+  const doc=new pdfkit();
+  doc.pipe(writeStream);
+  doc.fontSize(20).text("Plant analysis report", {align: "center"});
+  doc.moveDown();
+  doc.fontSize(15).text(`date: ${new Date().toDateString()}`);
+  doc.moveDown();
+  doc.fontSize(14).text(result,{align: "left"});
+  // insert image
+  if(image){
+    const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
+    const buffer=Buffer.from(base64Data, "base64");
+    doc.moveDown();
+    doc.image(buffer, {
+      fit:[500,300],
+      align: "center",
+      valign: "center",
+
+    });
+    doc.end();
+    // wait for the stream to finish
+    await new Promise((resolve,reject)=>{
+      writeStream.on("finish",resolve);
+      writeStream.on("error",reject);
+      res.download(pdfPath, filename, (err)=>{
+        if(err){
+         res.status(500).json({message: "Failed to download the file"});
+        }
+        fsPromises.unlink(pdfPath, (err)=>{
+          if(err){
+            console.log(err);
+          }
+        });
+      });
+    })
+  }
+ } catch (error) {
+  console.log(error);
+ }
 });
 
 // start the server
